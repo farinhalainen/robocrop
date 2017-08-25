@@ -1,0 +1,19 @@
+{
+  "name": "robocrop_server",
+  "version": "1.0.0",
+  "description": "UDP server for collection, HTTP server for access.",
+  "scripts": {
+    "start:udp": "nodemon src/udp_server.js",
+    "start:http": "nodemon src/http_server.js"
+  },
+  "author": "Sofia Pohjalainen / Sergio Garcez",
+  "dependencies": {
+    "express": "^4.15.3",
+    "lodash": "^4.17.4",
+    "pg": "^7.1.0",
+    "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  }
+}

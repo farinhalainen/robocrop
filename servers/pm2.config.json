@@ -1,0 +1,20 @@
+{
+  "apps" : [{
+    "name"       : "robocrop_http_server",
+    "script"     : "./src/http_server.js",
+    "instances"  : 1,
+    "exec_mode"  : "cluster",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  },
+  {
+    "name"       : "robocrop_udp_server",
+    "script"     : "./src/udp_server.js",
+    "instances"  : 1,
+    "exec_mode"  : "cluster",
+    "env": {
+      "NODE_ENV": "production"
+    }
+  }]
+}
