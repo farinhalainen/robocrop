@@ -1,0 +1,21 @@
+var _user$project$Types$Plant = F5(
+	function (a, b, c, d, e) {
+		return {id: a, name: b, latestValue: c, latestReadingAt: d, threshold: e};
+	});
+var _user$project$Types$Model = F4(
+	function (a, b, c, d) {
+		return {plants: a, errorMessage: b, currentView: c, focusedPlant: d};
+	});
+var _user$project$Types$ShowListView = {ctor: 'ShowListView'};
+var _user$project$Types$ShowPlantView = function (a) {
+	return {ctor: 'ShowPlantView', _0: a};
+};
+var _user$project$Types$HandlePlantDataResponse = function (a) {
+	return {ctor: 'HandlePlantDataResponse', _0: a};
+};
+var _user$project$Types$PlantDetailView = {ctor: 'PlantDetailView'};
+var _user$project$Types$PlantListView = {ctor: 'PlantListView'};
+var _user$project$Types$LoaderView = {ctor: 'LoaderView'};
+var _user$project$Types$Arum = {ctor: 'Arum'};
+var _user$project$Types$Howea = {ctor: 'Howea'};
+var _user$project$Types$Monstera = {ctor: 'Monstera'};

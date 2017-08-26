@@ -1,0 +1,14 @@
+production.js
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+node_modules/
+.env
+
+elm-stuff/
+
+.idea

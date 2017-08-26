@@ -1,0 +1,6 @@
+var _user$project$ColorUtil$endYellow = A3(_elm_lang$core$Color$rgb, 255, 201, 102);
+var _user$project$ColorUtil$startGreen = A3(_elm_lang$core$Color$rgb, 37, 179, 113);
+var _user$project$ColorUtil$getBackgroundColor = function (value) {
+	return _eskimoblood$elm_color_extra$Color_Convert$colorToHex(
+		A4(_eskimoblood$elm_color_extra$Color_Interpolate$interpolate, _eskimoblood$elm_color_extra$Color_Interpolate$RGB, _user$project$ColorUtil$startGreen, _user$project$ColorUtil$endYellow, value));
+};

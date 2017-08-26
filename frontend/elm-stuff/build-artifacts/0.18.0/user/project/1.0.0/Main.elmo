@@ -1,0 +1,20 @@
+var _user$project$Main$initModel = {
+	plants: {
+		ctor: '::',
+		_0: {id: 0, name: 'Blob', latestValue: 0, latestReadingAt: '2017-08-12T22:30:18.800Z', threshold: 0},
+		_1: {ctor: '[]'}
+	},
+	currentView: _user$project$Types$LoaderView,
+	errorMessage: _elm_lang$core$Maybe$Nothing,
+	focusedPlant: _elm_lang$core$Maybe$Nothing
+};
+var _user$project$Main$init = {ctor: '_Tuple2', _0: _user$project$Main$initModel, _1: _user$project$Update$getLatestReading};
+var _user$project$Main$main = _elm_lang$html$Html$program(
+	{
+		init: _user$project$Main$init,
+		view: _user$project$View$view,
+		update: _user$project$Update$update,
+		subscriptions: function (_p0) {
+			return _elm_lang$core$Platform_Sub$none;
+		}
+	})();
