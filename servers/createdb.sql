@@ -19,7 +19,7 @@ CREATE TABLE plants
   id bigserial NOT NULL,
   name text NOT NULL,
   threshold smallint NOT NULL DEFAULT 512,
-  species text,
+  genus text,
   room text,
   CONSTRAINT pk_plant PRIMARY KEY (id)
 )

@@ -107,7 +107,7 @@ const all_plants_q = `
   select
     r1.created_at, r1.value,
     plants.name, plants.threshold, plants.id,
-    plants.room, plants.species
+    plants.room, plants.genus
   from
     readings r1
   left join
@@ -123,7 +123,7 @@ const single_plant_q = `
   select
     r1.created_at, r1.value,
     plants.name, plants.threshold, plants.id,
-    plants.room, plants.species
+    plants.room, plants.genus
   from
     readings r1
   left join
@@ -179,12 +179,12 @@ const all_readings_q = `
 const serialise_plants = list => (list.map(serialise_plant))
 
 const serialise_plant =
-  ({id, name, room, species, value, created_at, threshold}) =>
+  ({id, name, room, genus, value, created_at, threshold}) =>
     ({
       id: parseInt(id),
       name,
       room,
-      species,
+      genus,
       latestValue: value,
       latestReadingAt: created_at,
       threshold,
