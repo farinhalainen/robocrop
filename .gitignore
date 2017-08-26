@@ -8,3 +8,5 @@ pids
 
 node_modules/
 .env
+
+elm-stuff/
