@@ -1,0 +1,12 @@
+var _user$project$ViewUtil$getRandomLeaf = function (model) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		'./icons/leaf_',
+		A2(_elm_lang$core$Basics_ops['++'], model.leafNumber, '.svg'));
+};
+var _user$project$ViewUtil$endYellow = A3(_elm_lang$core$Color$rgb, 255, 201, 102);
+var _user$project$ViewUtil$startGreen = A3(_elm_lang$core$Color$rgb, 37, 179, 113);
+var _user$project$ViewUtil$getBackgroundColor = function (value) {
+	return _eskimoblood$elm_color_extra$Color_Convert$colorToHex(
+		A4(_eskimoblood$elm_color_extra$Color_Interpolate$interpolate, _eskimoblood$elm_color_extra$Color_Interpolate$RGB, _user$project$ViewUtil$startGreen, _user$project$ViewUtil$endYellow, value));
+};

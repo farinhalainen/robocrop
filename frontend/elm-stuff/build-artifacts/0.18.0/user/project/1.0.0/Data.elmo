@@ -1,0 +1,11 @@
+var _user$project$Data$Plant = F5(
+	function (a, b, c, d, e) {
+		return {id: a, name: b, latestValue: c, latestReadingAt: d, threshold: e};
+	});
+var _user$project$Data$Model = F3(
+	function (a, b, c) {
+		return {plants: a, view: b, errorMessage: c};
+	});
+var _user$project$Data$HandlePlantDataResponse = function (a) {
+	return {ctor: 'HandlePlantDataResponse', _0: a};
+};

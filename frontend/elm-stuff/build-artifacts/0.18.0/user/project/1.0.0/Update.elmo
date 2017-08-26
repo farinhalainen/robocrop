@@ -1,0 +1,75 @@
+var _user$project$Update$plantDecoder = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'threshold',
+	_elm_lang$core$Json_Decode$int,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'latestReadingAt',
+		_elm_lang$core$Json_Decode$string,
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'latestValue',
+			_elm_lang$core$Json_Decode$int,
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'name',
+				_elm_lang$core$Json_Decode$string,
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'id',
+					_elm_lang$core$Json_Decode$int,
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Types$Plant))))));
+var _user$project$Update$mainDecoder = A2(
+	_elm_lang$core$Json_Decode$field,
+	'plants',
+	_elm_lang$core$Json_Decode$list(_user$project$Update$plantDecoder));
+var _user$project$Update$getLatestReading = A2(
+	_elm_lang$http$Http$send,
+	_user$project$Types$HandlePlantDataResponse,
+	A2(_elm_lang$http$Http$get, 'http://api.plants.sofiapoh.com/plants', _user$project$Update$mainDecoder));
+var _user$project$Update$update = F2(
+	function (msg, model) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
+			case 'HandlePlantDataResponse':
+				var _p1 = _p0._0;
+				if (_p1.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{plants: _p1._0, currentView: _user$project$Types$PlantListView}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								errorMessage: _elm_lang$core$Maybe$Just('Something went wrong')
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				}
+			case 'ShowPlantView':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							currentView: _user$project$Types$PlantDetailView,
+							focusedPlant: _elm_lang$core$Maybe$Just(_p0._0)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{currentView: _user$project$Types$PlantListView, focusedPlant: _elm_lang$core$Maybe$Nothing}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+		}
+	});
