@@ -11,11 +11,11 @@ System components:
 - Hardware (Arduino mkr1000 + FC-28 Soil moisture sensor)
 - Arduino script
 - UDP Server
-- DB Schema
+- Database
 - REST API
 - Elm SPA
 
 Features:
-- [x] Read latest readings for all plants
+- [x] Retrieve latest readings for all plants
 - [ ] Allow users to modify plant data (name, species, etc)
 - [ ] User system supporting authentication
