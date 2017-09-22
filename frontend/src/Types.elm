@@ -12,14 +12,14 @@ type alias Plant =
   }
 
 type alias Model =
-  {  plants : List Plant
+  {  plants : Maybe (List Plant)
    , errorMessage : Maybe String
    , currentView : View
    , focusedPlant: Maybe Plant
   }
 
 type Msg 
-  = HandlePlantDataResponse (Result Http.Error (List Plant))
+  = PlantDataResponse (Result Http.Error (List Plant))
   | ShowPlantView Plant
   | ShowListView
 
