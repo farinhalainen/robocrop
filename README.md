@@ -4,7 +4,7 @@
 
 Sensor data is acquired via Arduino -(UDP)-> UDP Server -> PostgreSQL
 
-Users facing system is an SPA -> REST API -> PostgreSQL
+User facing system is an SPA -> REST API -> PostgreSQL
 
 
 System components:
