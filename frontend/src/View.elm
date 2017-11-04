@@ -1,22 +1,32 @@
 module View exposing (..)
 
-import Styles exposing (..)
-import Types exposing (..)
+import Date exposing (Date, fromString)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Plot exposing (..)
+import Styles exposing (..)
+import Types exposing (..)
 
 
-renderPlant : Plant -> Html Msg
-renderPlant plant =
-    li [onClick (ShowPlantView plant), listItemStyles plant.latestValue plant.threshold ]
-    [ img [src "./icons/leaf_3.svg"] []
-    , div [textWrapperStyles]
-        [ h3 [] [text plant.name]
-        , p []  [text plant.latestReadingAt]
-        , span [] [text (toString plant.latestValue)]
+renderTime : String -> Result String Date
+renderTime time =
+    fromString time
+
+
+renderPlant : Plant -> Bool -> Html Msg
+renderPlant plant isFocused =
+    li [ expandedStyles plant isFocused ]
+        [ div [ onClick (SetFocusedPlant plant), listItemStyles plant.latestValue plant.threshold ]
+            [ img [ src "./icons/leaf_3.svg" ] []
+            , div [ textWrapperStyles ]
+                [ h3 [] [ text plant.name ]
+                , p [] [ text (toString (renderTime plant.latestReadingAt)) ]
+                , span [] [ text (toString plant.latestValue) ]
+                ]
+            ]
         ]
-    ]
+
 
 loaderView : Model -> Html Msg
 loaderView model =
@@ -24,36 +34,45 @@ loaderView model =
         Just message ->
             div [ class "error" ]
                 [ text message ]
+
         Nothing ->
             text "Loading..."
 
+
+wrapRenderPlant : Maybe Plant -> Plant -> Html Msg
+wrapRenderPlant focused_plant plant =
+    case focused_plant of
+        Just focused_plant ->
+            renderPlant plant (plant == focused_plant)
+
+        Nothing ->
+            renderPlant plant False
+
+
 listView : Model -> Html Msg
 listView model =
+    let
+        partialWrapRenderPlant =
+            wrapRenderPlant model.focusedPlant
+    in
     case model.plants of
         Just plants ->
             div []
-                [ ul [listStyles] (List.map renderPlant plants)
-            ]
+                [ ul [ listStyles ] (List.map partialWrapRenderPlant plants)
+                ]
+
         Nothing ->
             text "No Plants!"
 
-detailView : Model -> Html Msg
-detailView model =
-    case model.focusedPlant of
-        Just plant ->
-            div []
-                [ h4 [] [text plant.name]
-                , button [onClick ShowListView] [text "Go Back"]
-                ]
-        Nothing ->
-            text "No plant selected!"
 
 view : Model -> Html Msg
 view model =
     case model.currentView of
         LoaderView ->
             loaderView model
+
         PlantListView ->
             listView model
+
         PlantDetailView ->
             detailView model

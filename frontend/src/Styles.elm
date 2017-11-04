@@ -3,12 +3,27 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import ViewUtil exposing (getBackgroundColor)
 
+listStyles : Attribute msg
 listStyles =
     style
         [ ("listStyle", "none")
         , ("padding", "0")
         , ("margin", "0")
         ]
+
+expandedStyles : a -> Bool -> Attribute msg
+expandedStyles plant isFocused =
+    let
+        plantHeight =
+            if isFocused then
+                "600px"
+            else
+                "auto"
+    in
+        style
+            [ ("height", plantHeight)
+            , ("transition", "height 0.4s")
+            ]
 
 listItemStyles : Int -> Int -> Html.Attribute msg
 listItemStyles drynessVal threshold =
@@ -19,12 +34,12 @@ listItemStyles drynessVal threshold =
         t = toFloat(Basics.max drynessVal threshold)
     in
         style 
-            [ ("backgroundColor", getBackgroundColor (Debug.log "d" dry / Debug.log "t" t))
+            [ ("backgroundColor", getBackgroundColor (dry / t))
             , ("padding", "10px")
             , ("display", "flex")
             ]
 
-
+textWrapperStyles : Attribute msg
 textWrapperStyles =
     style
         [ ("display", "flex")
