@@ -115,6 +115,7 @@ app.get("/plants/:id/daily-averages", (req, res, next) => {
 // Queries
 //=============================================================================
 
+// all plants + latest reading.
 const all_plants_q = `
   select
     r1.created_at, r1.value,
@@ -131,19 +132,24 @@ const all_plants_q = `
   offset $1
   limit $2`;
 
+// single plant and latest reading
 const single_plant_q = `
   select
-    r1.created_at, r1.value,
-    plants.name, plants.threshold, plants.id,
-    plants.room, plants.genus
+    readings.created_at,
+    readings.value,
+    plants.name,
+    plants.threshold,
+    plants.id,
+    plants.room,
+    plants.genus
   from
-    readings r1
+    plants
   left join
-    readings r2
-    on (r1.plant_id = r2.plant_id and r1.created_at < r2.created_at)
-  join plants
-    on (plants.id = r1.plant_id)
-  where r2.plant_id is null and plants.id = $1;`;
+    readings
+    on (readings.plant_id = plants.id)
+  where plants.id = $1
+  order by readings.created_at desc
+  limit 1`
 
 const plant_readings_q = `
   select *
@@ -192,8 +198,7 @@ const daily_average_q = `
   from readings
   where plant_id = $1
   group by date_trunc('day', created_at)
-  limit $2
-`;
+  limit $2`;
 
 //=============================================================================
 // Serialisers
