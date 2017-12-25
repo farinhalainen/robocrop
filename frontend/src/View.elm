@@ -75,4 +75,4 @@ view model =
             listView model
 
         PlantDetailView ->
-            detailView model
+            listView model

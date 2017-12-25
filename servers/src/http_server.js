@@ -149,7 +149,7 @@ const single_plant_q = `
     on (readings.plant_id = plants.id)
   where plants.id = $1
   order by readings.created_at desc
-  limit 1`
+  limit 1`;
 
 const plant_readings_q = `
   select *

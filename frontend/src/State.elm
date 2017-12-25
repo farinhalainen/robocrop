@@ -35,7 +35,7 @@ update msg model =
                     )
 
                 Err error ->
-                    ( { model | errorMessage = Just "Something went wrong" }
+                    ( { model | errorMessage = Just (toString error) }
                     , Cmd.none
                     )
 
@@ -59,18 +59,18 @@ update msg model =
                     ( { model | readings = Just readings }, Cmd.none )
 
                 Err error ->
-                    ( { model | errorMessage = Just "Problem fetching the readings" }, Cmd.none )
+                    ( { model | errorMessage = Just (toString error) }, Cmd.none )
 
 
 getLatestReading : Cmd Msg
 getLatestReading =
-    Http.get "http://api.plants.sofiapoh.com/plants" mainDecoder
+    Http.get "http://localhost:4000/plants" mainDecoder
         |> Http.send PlantDataResponse
 
 
 getTimelineReading : Cmd Msg
 getTimelineReading =
-    Http.get "http://api.plants.sofiapoh.com/plants/1/readings?limit=10" seriesDecoder
+    Http.get "http://localhost:4000/plants/1/readings?limit=10" seriesDecoder
         |> Http.send PlantSeriesResponse
 
 
