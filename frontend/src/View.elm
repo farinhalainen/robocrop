@@ -1,17 +1,11 @@
 module View exposing (..)
 
-import Date exposing (Date, fromString)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Plot exposing (..)
 import Styles exposing (..)
 import Types exposing (..)
-
-
-renderTime : String -> Result String Date
-renderTime time =
-    fromString time
+import ViewUtil exposing (getFormattedTime)
 
 
 renderPlant : Plant -> Bool -> Html Msg
@@ -21,7 +15,7 @@ renderPlant plant isFocused =
             [ img [ src "./icons/leaf_3.svg" ] []
             , div [ textWrapperStyles ]
                 [ h3 [] [ text plant.name ]
-                , p [] [ text (toString (renderTime plant.latestReadingAt)) ]
+                , p [] [ text (getFormattedTime plant.latestReadingAt) ]
                 , span [] [ text (toString plant.latestValue) ]
                 ]
             ]
