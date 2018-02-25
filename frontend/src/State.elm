@@ -64,13 +64,13 @@ update msg model =
 
 getLatestReading : Cmd Msg
 getLatestReading =
-    Http.get "http://localhost:4000/plants" mainDecoder
+    Http.get "http://api.plants.sofiapoh.com/plants" mainDecoder
         |> Http.send PlantDataResponse
 
 
 getTimelineReading : Cmd Msg
 getTimelineReading =
-    Http.get "http://localhost:4000/plants/1/readings?limit=10" seriesDecoder
+    Http.get "http://api.plants.sofiapoh.com/plants/1/readings?limit=10" seriesDecoder
         |> Http.send PlantSeriesResponse
 
 
