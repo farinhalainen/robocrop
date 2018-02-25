@@ -35,7 +35,7 @@ update msg model =
                     )
 
                 Err error ->
-                    ( { model | errorMessage = Just "Something went wrong" }
+                    ( { model | errorMessage = Just (toString error) }
                     , Cmd.none
                     )
 
@@ -59,7 +59,7 @@ update msg model =
                     ( { model | readings = Just readings }, Cmd.none )
 
                 Err error ->
-                    ( { model | errorMessage = Just "Problem fetching the readings" }, Cmd.none )
+                    ( { model | errorMessage = Just (toString error) }, Cmd.none )
 
 
 getLatestReading : Cmd Msg

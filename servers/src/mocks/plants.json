@@ -1,0 +1,25 @@
+{
+  "plants": [
+    {
+      "id": 1,
+      "name": "Monstera",
+      "latestValue": 466,
+      "latestReadingAt": "2017-12-25T00:19:48.241Z",
+      "threshold": 1023
+    },
+    {
+      "id": 2,
+      "name": "Leafy boi",
+      "latestValue": 900,
+      "latestReadingAt": "2017-12-25T07:27:36.069Z",
+      "threshold": 1023
+    },
+    {
+      "id": 3,
+      "name": "Palm",
+      "latestValue": 139,
+      "latestReadingAt": "2017-12-25T17:29:55.445Z",
+      "threshold": 1023
+    }
+  ]
+}
