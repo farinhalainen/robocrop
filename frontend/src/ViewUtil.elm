@@ -82,4 +82,4 @@ getLeaf genus =
             "./icons/leaf_2.svg"
 
         _ ->
-            "./icons/leaf_3.svg"
+            "./icons/leaf_4.svg"

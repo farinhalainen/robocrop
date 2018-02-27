@@ -75,7 +75,7 @@ update msg model =
 
 getLatestReading : Cmd Msg
 getLatestReading =
-    Http.get "http://api.plants.sofiapoh.com/plants" mainDecoder
+    Http.get "https://api.plants.sofiapoh.com/plants" mainDecoder
         |> Http.send PlantDataResponse
 
 
@@ -98,7 +98,7 @@ getTimelineReading : Int -> Cmd Msg
 getTimelineReading plantId =
     let
         url =
-            "http://api.plants.sofiapoh.com/plants/"
+            "https://api.plants.sofiapoh.com/plants/"
                 ++ toString plantId
                 ++ "/hourly-readings?limit=24"
     in
