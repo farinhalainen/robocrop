@@ -12,8 +12,14 @@ loaderStyles =
 
 plantTitleStyles =
     style
-        [ ( "marginTop", "0" )
-        , ( "marginBottom", "10px" )
+        [ ( "margin", "10px 0" )
+        ]
+
+
+imgStyles =
+    style
+        [ ( "width", "120px" )
+        , ( "height", "110px" )
         ]
 
 
@@ -39,6 +45,7 @@ textWrapperStyles =
         [ ( "display", "flex" )
         , ( "flexDirection", "column" )
         , ( "marginLeft", "20px" )
+        , ( "marginTop", "10px" )
         ]
 
 

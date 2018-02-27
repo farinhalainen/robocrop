@@ -14,7 +14,7 @@ renderPlant : Plant -> Maybe (List Reading) -> Html Msg
 renderPlant plant readings =
     li [ horizontalWrapperStyles plant.latestValue plant.threshold ]
         [ div [ onClick (SetFocusedPlant plant.id), listItemStyles ]
-            [ img [ imgStyles, src (getLeaf plant.genus), alt (plant.genus ++ " leaf") ] []
+            [ img [ imgStyles, src (getLeaf plant.genus) ] []
             , div [ textWrapperStyles ]
                 [ h2 [ plantTitleStyles ] [ text plant.name ]
                 , span [] [ text (getVerboseTime plant.latestReadingAt) ]
