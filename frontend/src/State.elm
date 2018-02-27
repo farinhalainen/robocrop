@@ -9,16 +9,16 @@ import Types exposing (..)
 initModel : Model
 initModel =
     { plants = Nothing
-    , focusedPlant = Nothing
     , currentView = LoaderView
+    , focusedPlantId = Nothing
+    , focusedPlantReadings = Nothing
     , errorMessage = Nothing
-    , readings = Nothing
     }
 
 
 init : ( Model, Cmd Msg )
 init =
-    ( initModel, Cmd.batch [ getLatestReading, getTimelineReading ] )
+    ( initModel, getLatestReading )
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -39,16 +39,27 @@ update msg model =
                     , Cmd.none
                     )
 
-        SetFocusedPlant plant ->
-            ( { model
-                | focusedPlant = Just plant
-              }
-            , Cmd.none
-            )
+        SetFocusedPlant plantId ->
+            case Just plantId == model.focusedPlantId of
+                True ->
+                    ( { model
+                        | focusedPlantId = Nothing
+                        , focusedPlantReadings = Nothing
+                      }
+                    , Cmd.none
+                    )
+
+                False ->
+                    ( { model
+                        | focusedPlantId = Just plantId
+                        , focusedPlantReadings = Nothing
+                      }
+                    , getTimelineReadingIfNewFocus model plantId
+                    )
 
         ShowListView ->
             ( { model
-                | focusedPlant = Nothing
+                | focusedPlantId = Nothing
               }
             , Cmd.none
             )
@@ -56,7 +67,7 @@ update msg model =
         PlantSeriesResponse result ->
             case result of
                 Ok readings ->
-                    ( { model | readings = Just readings }, Cmd.none )
+                    ( { model | focusedPlantReadings = Just readings }, Cmd.none )
 
                 Err error ->
                     ( { model | errorMessage = Just (toString error) }, Cmd.none )
@@ -68,9 +79,30 @@ getLatestReading =
         |> Http.send PlantDataResponse
 
 
-getTimelineReading : Cmd Msg
-getTimelineReading =
-    Http.get "http://api.plants.sofiapoh.com/plants/1/readings?limit=10" seriesDecoder
+getTimelineReadingIfNewFocus : Model -> Int -> Cmd Msg
+getTimelineReadingIfNewFocus model plantId =
+    case model.focusedPlantId of
+        Just id ->
+            case id == plantId of
+                True ->
+                    Cmd.none
+
+                False ->
+                    getTimelineReading plantId
+
+        Nothing ->
+            getTimelineReading plantId
+
+
+getTimelineReading : Int -> Cmd Msg
+getTimelineReading plantId =
+    let
+        url =
+            "http://api.plants.sofiapoh.com/plants/"
+                ++ toString plantId
+                ++ "/hourly-readings?limit=24"
+    in
+    Http.get url seriesDecoder
         |> Http.send PlantSeriesResponse
 
 
@@ -100,3 +132,4 @@ plantDecoder =
         |> Pipeline.required "latestValue" Decode.int
         |> Pipeline.required "latestReadingAt" Decode.string
         |> Pipeline.required "threshold" Decode.int
+        |> Pipeline.optional "genus" Decode.string "mixed"

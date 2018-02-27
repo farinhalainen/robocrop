@@ -4,21 +4,46 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Styles exposing (..)
+import Svg exposing (circle, svg)
+import Svg.Attributes exposing (cx, cy, r, viewBox)
 import Types exposing (..)
-import ViewUtil exposing (getFormattedTime)
+import ViewUtil exposing (getFormattedTime, getLeaf, getVerboseTime)
 
 
-renderPlant : Plant -> Bool -> Html Msg
-renderPlant plant isFocused =
-    li [ expandedStyles plant isFocused ]
-        [ div [ onClick (SetFocusedPlant plant), listItemStyles plant.latestValue plant.threshold ]
-            [ img [ src "./icons/leaf_3.svg" ] []
+renderPlant : Plant -> Maybe (List Reading) -> Html Msg
+renderPlant plant readings =
+    li [ horizontalWrapperStyles plant.latestValue plant.threshold ]
+        [ div [ onClick (SetFocusedPlant plant.id), listItemStyles ]
+            [ img [ src (getLeaf plant.genus) ] []
             , div [ textWrapperStyles ]
-                [ h3 [] [ text plant.name ]
-                , p [] [ text (getFormattedTime plant.latestReadingAt) ]
-                , span [] [ text (toString plant.latestValue) ]
+                [ h2 [ plantTitleStyles ] [ text plant.name ]
+                , span [] [ text (getVerboseTime plant.latestReadingAt) ]
                 ]
             ]
+        , timeSeries readings
+        ]
+
+
+timeSeries : Maybe (List Reading) -> Html Msg
+timeSeries series =
+    case series of
+        Nothing ->
+            ul []
+                []
+
+        Just series ->
+            div [ listWrapperStyles ]
+                [ ul [ seriesListStyles ] (List.map timeSeriesElement series)
+                ]
+
+
+timeSeriesElement : Reading -> Html Msg
+timeSeriesElement reading =
+    li [ readingStyles ]
+        [ svg [ svgStyle, viewBox "0 0 24 24" ]
+            [ circle [ cx "12", cy "12", r "12", circleStyles reading.value 512 ] []
+            ]
+        , span [] [ text (getFormattedTime reading.time) ]
         ]
 
 
@@ -26,33 +51,39 @@ loaderView : Model -> Html Msg
 loaderView model =
     case model.errorMessage of
         Just message ->
-            div [ class "error" ]
+            div []
                 [ text message ]
 
         Nothing ->
-            text "Loading..."
+            div [ loaderStyles ]
+                [ text "Loading..." ]
 
 
-wrapRenderPlant : Maybe Plant -> Plant -> Html Msg
-wrapRenderPlant focused_plant plant =
-    case focused_plant of
-        Just focused_plant ->
-            renderPlant plant (plant == focused_plant)
+wrapRenderPlant : Maybe Int -> Maybe (List Reading) -> Plant -> Html Msg
+wrapRenderPlant focusedPlantId focusedPlantReadings plant =
+    case focusedPlantId of
+        Just focusedPlantId ->
+            case plant.id == focusedPlantId of
+                True ->
+                    renderPlant plant focusedPlantReadings
+
+                False ->
+                    renderPlant plant Nothing
 
         Nothing ->
-            renderPlant plant False
+            renderPlant plant Nothing
 
 
 listView : Model -> Html Msg
 listView model =
     let
-        partialWrapRenderPlant =
-            wrapRenderPlant model.focusedPlant
+        plantRenderFunc =
+            wrapRenderPlant model.focusedPlantId model.focusedPlantReadings
     in
     case model.plants of
         Just plants ->
             div []
-                [ ul [ listStyles ] (List.map partialWrapRenderPlant plants)
+                [ ul [ listStyles ] (List.map plantRenderFunc plants)
                 ]
 
         Nothing ->
@@ -66,7 +97,4 @@ view model =
             loaderView model
 
         PlantListView ->
-            listView model
-
-        PlantDetailView ->
             listView model

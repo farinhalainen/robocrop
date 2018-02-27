@@ -22,11 +22,6 @@ getBackgroundColor value =
         |> colorToHex
 
 
-getRandomLeaf : { a | leafNumber : String } -> String
-getRandomLeaf model =
-    "./icons/leaf_" ++ model.leafNumber ++ ".svg"
-
-
 renderTime : String -> Date
 renderTime time =
     fromString time |> Result.withDefault (Date.fromTime 0)
@@ -44,19 +39,21 @@ getHourAndMin day =
             hour day |> toString
 
         mins =
-            minute day |> toString
-
-        period =
-            if hour day > 12 then
-                "pm"
-            else
-                "am"
+            paddedInt (minute day)
     in
-    hours ++ ":" ++ mins ++ " " ++ period
+    hours ++ ":" ++ mins
 
 
-getFormattedTime : String -> String
-getFormattedTime date =
+paddedInt : Int -> String
+paddedInt int =
+    if int < 10 then
+        "0" ++ (int |> toString)
+    else
+        int |> toString
+
+
+getVerboseTime : String -> String
+getVerboseTime date =
     let
         day =
             renderTime date |> getDay |> toString
@@ -65,3 +62,24 @@ getFormattedTime date =
             renderTime date |> getHourAndMin
     in
     "Last reading on " ++ day ++ " at " ++ time
+
+
+getFormattedTime : String -> String
+getFormattedTime date =
+    renderTime date |> getHourAndMin
+
+
+getLeaf : String -> String
+getLeaf genus =
+    case genus of
+        "Monstera" ->
+            "./icons/leaf_1.svg"
+
+        "Spathiphyllum" ->
+            "./icons/leaf_3.svg"
+
+        "Howea" ->
+            "./icons/leaf_2.svg"
+
+        _ ->
+            "./icons/leaf_3.svg"

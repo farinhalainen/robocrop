@@ -9,11 +9,12 @@ type alias Plant =
     , latestValue : Int
     , latestReadingAt : String
     , threshold : Int
+    , genus : String
     }
 
 
 type alias Reading =
-    { id : Int
+    { plantId : Int
     , value : Int
     , time : String
     }
@@ -23,14 +24,14 @@ type alias Model =
     { plants : Maybe (List Plant)
     , errorMessage : Maybe String
     , currentView : View
-    , focusedPlant : Maybe Plant
-    , readings : Maybe (List Reading)
+    , focusedPlantId : Maybe Int
+    , focusedPlantReadings : Maybe (List Reading)
     }
 
 
 type Msg
     = PlantDataResponse (Result Http.Error (List Plant))
-    | SetFocusedPlant Plant
+    | SetFocusedPlant Int
     | ShowListView
     | PlantSeriesResponse (Result Http.Error (List Reading))
 
@@ -38,10 +39,11 @@ type Msg
 type View
     = LoaderView
     | PlantListView
-    | PlantDetailView
 
 
 type Family
     = Monstera
+    | Spathiphyllum
     | Howea
     | Arum
+    | Mixed
