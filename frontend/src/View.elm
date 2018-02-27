@@ -14,7 +14,7 @@ renderPlant : Plant -> Maybe (List Reading) -> Html Msg
 renderPlant plant readings =
     li [ horizontalWrapperStyles plant.latestValue plant.threshold ]
         [ div [ onClick (SetFocusedPlant plant.id), listItemStyles ]
-            [ img [ src (getLeaf plant.genus) ] []
+            [ img [ imgStyles, src (getLeaf plant.genus) ] []
             , div [ textWrapperStyles ]
                 [ h2 [ plantTitleStyles ] [ text plant.name ]
                 , span [] [ text (getVerboseTime plant.latestReadingAt) ]
@@ -39,9 +39,13 @@ timeSeries series =
 
 timeSeriesElement : Reading -> Html Msg
 timeSeriesElement reading =
+    let
+        baselineThreshold =
+            1023
+    in
     li [ readingStyles ]
         [ svg [ svgStyle, viewBox "0 0 24 24" ]
-            [ circle [ cx "12", cy "12", r "12", circleStyles reading.value 512 ] []
+            [ circle [ cx "12", cy "12", r "12", circleStyles reading.value baselineThreshold ] []
             ]
         , span [] [ text (getFormattedTime reading.time) ]
         ]
