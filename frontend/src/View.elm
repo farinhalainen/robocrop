@@ -12,15 +12,15 @@ import ViewUtil exposing (getFormattedTime, getLeaf, getVerboseTime)
 
 renderPlant : Plant -> Maybe (List Reading) -> Html Msg
 renderPlant plant readings =
-    li [ expandedStyles ]
-        [ div [ onClick (SetFocusedPlant plant.id), listItemStyles plant.latestValue plant.threshold ]
+    li [ horizontalWrapperStyles plant.latestValue plant.threshold ]
+        [ div [ onClick (SetFocusedPlant plant.id), listItemStyles ]
             [ img [ src (getLeaf plant.genus) ] []
             , div [ textWrapperStyles ]
-                [ h3 [] [ text plant.name ]
-                , p [] [ text (getVerboseTime plant.latestReadingAt) ]
-                , timeSeries readings
+                [ h2 [ plantTitleStyles ] [ text plant.name ]
+                , span [] [ text (getVerboseTime plant.latestReadingAt) ]
                 ]
             ]
+        , timeSeries readings
         ]
 
 
@@ -32,7 +32,9 @@ timeSeries series =
                 []
 
         Just series ->
-            ul [ seriesListStyles ] (List.map timeSeriesElement series)
+            div [ listWrapperStyles ]
+                [ ul [ seriesListStyles ] (List.map timeSeriesElement series)
+                ]
 
 
 timeSeriesElement : Reading -> Html Msg
@@ -49,11 +51,12 @@ loaderView : Model -> Html Msg
 loaderView model =
     case model.errorMessage of
         Just message ->
-            div [ class "error" ]
+            div []
                 [ text message ]
 
         Nothing ->
-            text "Loading..."
+            div [ loaderStyles ]
+                [ text "Loading..." ]
 
 
 wrapRenderPlant : Maybe Int -> Maybe (List Reading) -> Plant -> Html Msg

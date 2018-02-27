@@ -100,7 +100,7 @@ getTimelineReading plantId =
         url =
             "http://api.plants.sofiapoh.com/plants/"
                 ++ toString plantId
-                ++ "/readings?limit=10"
+                ++ "/hourly-readings?limit=24"
     in
     Http.get url seriesDecoder
         |> Http.send PlantSeriesResponse

@@ -5,6 +5,43 @@ import Html.Attributes exposing (..)
 import ViewUtil exposing (getBackgroundColor)
 
 
+loaderStyles =
+    style
+        [ ( "margin", "10px" ) ]
+
+
+plantTitleStyles =
+    style
+        [ ( "marginTop", "0" )
+        , ( "marginBottom", "10px" )
+        ]
+
+
+horizontalWrapperStyles drynessVal threshold =
+    style
+        [ ( "backgroundColor", interpolation drynessVal threshold )
+        , ( "overflow", "hidden" )
+        , ( "padding", "5px" )
+        ]
+
+
+listItemStyles =
+    style
+        [ ( "padding", "10px" )
+        , ( "display", "flex" )
+        , ( "alignItems", "flex-start" )
+        ]
+
+
+textWrapperStyles : Attribute msg
+textWrapperStyles =
+    style
+        [ ( "display", "flex" )
+        , ( "flexDirection", "column" )
+        , ( "marginLeft", "20px" )
+        ]
+
+
 listStyles : Attribute msg
 listStyles =
     style
@@ -18,11 +55,18 @@ seriesListStyles : Attribute msg
 seriesListStyles =
     style
         [ ( "listStyle", "none" )
-        , ( "padding", "10px" )
         , ( "margin", "5px" )
+        , ( "padding", "0" )
         , ( "display", "flex" )
         , ( "background", "white" )
-        , ( "justifyContent", "center" )
+        , ( "justifyContent", "flex-start" )
+        , ( "overflowX", "auto" )
+        ]
+
+
+listWrapperStyles =
+    style
+        [ ( "display", "flex" )
         ]
 
 
@@ -59,22 +103,3 @@ interpolation drynessVal threshold =
             toFloat (Basics.max drynessVal threshold)
     in
     getBackgroundColor (dry / t)
-
-
-listItemStyles : Int -> Int -> Html.Attribute msg
-listItemStyles drynessVal threshold =
-    style
-        [ ( "backgroundColor", interpolation drynessVal threshold )
-        , ( "padding", "10px" )
-        , ( "display", "flex" )
-        , ( "alignItems", "flex-start" )
-        ]
-
-
-textWrapperStyles : Attribute msg
-textWrapperStyles =
-    style
-        [ ( "display", "flex" )
-        , ( "flexDirection", "column" )
-        , ( "marginLeft", "10px" )
-        ]
