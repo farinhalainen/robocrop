@@ -151,16 +151,22 @@ const single_plant_q = `
   where p.id = $1`;
 
 const plant_readings_q = `
-  select *
+  select 
+    readings.created_at,
+    readings.plant_id,
+    (LEAST(GREATEST(value, plants.min_threshold), plants.max_threshold) - plants.min_threshold) / (plants.max_threshold - plants.min_threshold)::float as ratio
   from readings
+  join plants on plants.id = readings.plant_id
   where plant_id = $1
   order by created_at desc
   offset $2
   limit $3`;
 
 const readings_per_hour = `
-  select
-    q.plant_id, q.created_at, q.value
+    select
+    q.plant_id,
+    q.created_at,
+    (LEAST(GREATEST(q.value, plants.min_threshold), plants.max_threshold) - plants.min_threshold) / (plants.max_threshold - plants.min_threshold)::float as ratio
   from
     (
       select plant_id, max(created_at) as created_at
@@ -169,7 +175,8 @@ const readings_per_hour = `
   join
     readings q
     on latest_per_hour.plant_id = q.plant_id
-    and latest_per_hour.created_at = q.created_at`;
+    and latest_per_hour.created_at = q.created_at
+  join plants on plants.id = q.plant_id`;
 
 const all_hourly_readings_q =
   readings_per_hour +
@@ -187,7 +194,12 @@ const plant_hourly_readings_q =
   limit $3`;
 
 const all_readings_q = `
-  select * from readings
+  select 
+    readings.created_at,
+    readings.plant_id,
+    (LEAST(GREATEST(value, plants.min_threshold), plants.max_threshold) - plants.min_threshold) / (plants.max_threshold - plants.min_threshold)::float as ratio
+  from readings
+  join plants on plants.id = readings.plant_id
   order by created_at desc
   offset $1
   limit $2`;
@@ -228,9 +240,9 @@ const serialise_plant = ({
 
 const serialise_readings = list => list.map(serialise_reading);
 
-const serialise_reading = ({ value, created_at, plant_id }) => ({
+const serialise_reading = ({ ratio, created_at, plant_id }) => ({
   plant_id: parseInt(plant_id),
-  value,
+  ratio,
   time: created_at
 });
 
