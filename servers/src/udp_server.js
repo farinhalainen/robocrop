@@ -23,7 +23,7 @@ server.on("listening", () => {
 
 const q = `
   with updated as (INSERT INTO readings(plant_id, value) VALUES($1, $2))
-  UPDATE plants SET "denorm_latest_value"=$2 WHERE id=$1`;
+  UPDATE plants SET "denorm_latest_value"=$2, "denorm_latest_value_ts"=now() WHERE id=$1`;
 server.on("message", message => {
   var plant_id, value;
   try {
