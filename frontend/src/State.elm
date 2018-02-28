@@ -120,7 +120,7 @@ readingDecoder : Decoder Reading
 readingDecoder =
     Pipeline.decode Reading
         |> Pipeline.required "plant_id" Decode.int
-        |> Pipeline.required "value" Decode.int
+        |> Pipeline.required "ratio" Decode.float
         |> Pipeline.required "time" Decode.string
 
 
@@ -129,7 +129,6 @@ plantDecoder =
     Pipeline.decode Plant
         |> Pipeline.required "id" Decode.int
         |> Pipeline.required "name" Decode.string
-        |> Pipeline.required "latestValue" Decode.int
+        |> Pipeline.required "latestReadingRatio" Decode.float
         |> Pipeline.required "latestReadingAt" Decode.string
-        |> Pipeline.required "threshold" Decode.int
         |> Pipeline.optional "genus" Decode.string "mixed"

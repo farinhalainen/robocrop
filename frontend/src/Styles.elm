@@ -23,9 +23,9 @@ imgStyles =
         ]
 
 
-horizontalWrapperStyles drynessVal threshold =
+horizontalWrapperStyles latestReadingRatio =
     style
-        [ ( "backgroundColor", interpolation drynessVal threshold )
+        [ ( "backgroundColor", getBackgroundColor latestReadingRatio )
         , ( "overflow", "hidden" )
         , ( "padding", "5px" )
         ]
@@ -95,18 +95,7 @@ svgStyle =
         ]
 
 
-circleStyles value threshold =
+circleStyles latestReadingRatio =
     style
-        [ ( "fill", interpolation value threshold )
+        [ ( "fill", getBackgroundColor latestReadingRatio )
         ]
-
-
-interpolation drynessVal threshold =
-    let
-        dry =
-            toFloat drynessVal
-
-        t =
-            toFloat (Basics.max drynessVal threshold)
-    in
-    getBackgroundColor (dry / t)
