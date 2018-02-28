@@ -247,7 +247,7 @@ const get_offset_limit = (config, req) => {
   const offset = req.query.offset || "0";
   const default_limit = config.http_server.default_limit;
   const max_limit = config.http_server.max_limit;
-  const limit = Math.min(parseInt(req.query.limit || default_limit), max_limit);
+  const limit = Math.min(parseInt(req.query.limit || default_limit), max_limit) || null;
   return { offset, limit };
 };
 
