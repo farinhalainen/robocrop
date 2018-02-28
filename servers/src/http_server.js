@@ -118,38 +118,37 @@ app.get("/plants/:id/daily-averages", (req, res, next) => {
 // all plants + latest reading.
 const all_plants_q = `
   select
-    r1.created_at, r1.value,
-    plants.name, plants.threshold, plants.id,
-    plants.room, plants.genus
+    p.id,
+    p.name,
+    p.min_threshold,
+    p.max_threshold,
+    p.room,
+    p.genus,
+    p.denorm_latest_value_ts as latest_value_ts,
+    p.denorm_latest_value as latest_value,
+    (LEAST(GREATEST(coalesce(denorm_latest_value, 0), p.min_threshold), p.max_threshold) - p.min_threshold) / (p.max_threshold - p.min_threshold)::float as latest_value_ratio
   from
-    readings r1
-  left join
-    readings r2
-    on (r1.plant_id = r2.plant_id and r1.created_at < r2.created_at)
-  join plants
-    on (plants.id = r1.plant_id)
-  where r2.plant_id is null
+    plants p
+  order by
+    p.created_at
   offset $1
   limit $2`;
 
 // single plant and latest reading
 const single_plant_q = `
   select
-    readings.created_at,
-    readings.value,
-    plants.name,
-    plants.threshold,
-    plants.id,
-    plants.room,
-    plants.genus
+    p.id,
+    p.name,
+    p.min_threshold,
+    p.max_threshold,
+    p.room,
+    p.genus,
+    p.denorm_latest_value_ts as latest_value_ts,
+    p.denorm_latest_value as latest_value,
+    (LEAST(GREATEST(coalesce(denorm_latest_value, 0), p.min_threshold), p.max_threshold) - p.min_threshold) / (p.max_threshold - p.min_threshold)::float as latest_value_ratio
   from
-    plants
-  left join
-    readings
-    on (readings.plant_id = plants.id)
-  where plants.id = $1
-  order by readings.created_at desc
-  limit 1`;
+    plants p
+  where p.id = $1`;
 
 const plant_readings_q = `
   select *
@@ -211,17 +210,20 @@ const serialise_plant = ({
   name,
   room,
   genus,
-  value,
-  created_at,
-  threshold
+  latest_value,
+  latest_value_ts,
+  latest_value_ratio,
+  min_threshold,
+  max_threshold
 }) => ({
   id: parseInt(id),
   name,
   room,
   genus,
-  latestValue: value,
-  latestReadingAt: created_at,
-  threshold
+  latestValue: latest_value,
+  latestReadingRatio: latest_value ? latest_value_ratio : null,
+  latestReadingAt: latest_value_ts,
+  threshold: max_threshold
 });
 
 const serialise_readings = list => list.map(serialise_reading);
@@ -245,6 +247,7 @@ const get_offset_limit = (config, req) => {
   const offset = req.query.offset || "0";
   const default_limit = config.http_server.default_limit;
   const max_limit = config.http_server.max_limit;
-  const limit = Math.min(parseInt(req.query.limit || default_limit), max_limit);
+  const limit = Math.min(parseInt(req.query.limit || default_limit), max_limit) || null;
   return { offset, limit };
 };
+
