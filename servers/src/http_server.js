@@ -130,7 +130,7 @@ const all_plants_q = `
   from
     plants p
   order by
-    p.created_at
+    p.created_at desc
   offset $1
   limit $2`;
 
