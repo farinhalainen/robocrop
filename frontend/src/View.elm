@@ -12,7 +12,7 @@ import ViewUtil exposing (getFormattedTime, getLeaf, getVerboseTime)
 
 renderPlant : Plant -> Maybe (List Reading) -> Html Msg
 renderPlant plant readings =
-    li [ horizontalWrapperStyles plant.latestValue plant.threshold ]
+    li [ horizontalWrapperStyles plant.latestReadingRatio ]
         [ div [ onClick (SetFocusedPlant plant.id), listItemStyles ]
             [ img [ imgStyles, src (getLeaf plant.genus) ] []
             , div [ textWrapperStyles ]
@@ -45,7 +45,7 @@ timeSeriesElement reading =
     in
     li [ readingStyles ]
         [ svg [ svgStyle, viewBox "0 0 24 24" ]
-            [ circle [ cx "12", cy "12", r "12", circleStyles reading.value baselineThreshold ] []
+            [ circle [ cx "12", cy "12", r "12", circleStyles reading.ratio ] []
             ]
         , span [] [ text (getFormattedTime reading.time) ]
         ]

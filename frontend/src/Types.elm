@@ -6,16 +6,15 @@ import Http
 type alias Plant =
     { id : Int
     , name : String
-    , latestValue : Int
+    , latestReadingRatio : Float
     , latestReadingAt : String
-    , threshold : Int
     , genus : String
     }
 
 
 type alias Reading =
     { plantId : Int
-    , value : Int
+    , ratio : Float
     , time : String
     }
 
